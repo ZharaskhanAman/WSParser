@@ -2,13 +2,16 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-
+from selenium.common.exceptions import WebDriverException
 
 class Parser:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.driver = webdriver.Chrome('./chromedriver')
+        try:
+            self.driver = webdriver.Chrome('chromedriver')
+        except WebDriverException as e:
+            raise Exception('*** Please install chromedriver first ***')
         self.driver.set_window_size(1024, 768)
 
     def login(self):
@@ -85,7 +88,8 @@ class Parser:
 
 
 if __name__ == '__main__':
-    test = Parser("z_aman", "Password")
+    # credentials here:
+    test = Parser("login", "password")
     test.login()
     time.sleep(6)
     test.get_schedule("2018-2019", "Весенний")
