@@ -1,19 +1,22 @@
 import re
 
-with open("../data/lessons.txt") as fp:
-    for line in fp:
 
-        line = line.replace("Круглый зал", "Круглый_зал")
-        print(line)
-        line = line.rstrip().split(" ")
+def parse_lessons(line):
+    line = line.replace('\n', ' ')
+    line = line.replace("Круглый зал", "Круглый_зал")
+    line = line.rstrip().split(" ")
 
-        match = re.search("\(([0-9:]{5})-([0-9:]{5})\)", line[-1])
+    match = re.search("\(([0-9:]{5})-([0-9:]{5})\)", line[-1])
 
-        print("Start: " + match.group(1))
-        print("End: " + match.group(2))
+    return {
+        "start_time": match.group(1),
+        "end_time": match.group(2),
+        "room": line[-2],
+        "teacher": line[-5] + " " + line[-4],
+        "subject": " ".join(line[:-5])
+    }
 
-        print("Room: " + line[-2])
-        print("Class: " + line[-3])
-        print("Teacher: " + line[-5] + " " + line[-4])
-        line = line[:-5]
-        print("Subject:" + " ".join(line))
+
+#with open("../data/lessons.txt") as fp:
+#    for line in fp:
+#        print(parse_lessons(line))
