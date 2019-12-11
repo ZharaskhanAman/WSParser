@@ -3,9 +3,11 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 from selenium.common.exceptions import WebDriverException
+import yaml
 
 class Parser:
     def __init__(self, username, password):
+        print(username, password)
         self.username = username
         self.password = password
         try:
@@ -88,10 +90,12 @@ class Parser:
 
 
 if __name__ == '__main__':
-    # credentials here:
-    test = Parser("login", "password")
-    test.login()
-    time.sleep(6)
-    test.get_schedule("2018-2019", "Весенний")
+    with open("config.yml", "r") as stream:
+        credentials = (yaml.safe_load(stream))
+        # credentials here:
+        parser = Parser(credentials["login"], credentials["password"])
+        parser.login()
+        time.sleep(6)
+        parser.get_schedule("2018-2019", "Весенний")
 
 # driver.quit()
